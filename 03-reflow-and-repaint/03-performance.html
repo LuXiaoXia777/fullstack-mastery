@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>第三课：性能与动画</title>
+  <style>
+    /* 基础设置 */
+    body {
+      background-color: black;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 100px;
+    }
+
+    /* 核心：霓虹呼吸灯卡片 */
+    .neon-card {
+      width: 200px;
+      height: 200px;
+      border: 2px solid #B5E38C;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      /* 重点：使用 transform 触发 GPU 加速，避免重排 */
+      transition: transform 0.3s ease;
+      
+      /* 绑定下面定义的动画 */
+      animation: pulse 2s infinite;
+    }
+
+    /* 定义呼吸动画：只改变不触发重排的属性（如 opacity 和 shadow） */
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 10px #B5E38C;
+        opacity: 0.8;
+      }
+      50% {
+        box-shadow: 0 0 30px #B5E38C;
+        opacity: 1;
+      }
+      100% {
+        box-shadow: 0 0 10px #B5E38C;
+        opacity: 0.8;
+      }
+    }
+
+    /* 交互：鼠标悬停时轻微放大 */
+    /* 注意：用 transform: scale 放大是高性能的，因为它不改变盒子在文档中的位置 */
+    .neon-card:hover {
+      transform: scale(1.1);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="neon-card">
+    <span>霓虹呼吸</span>
+  </div>
+
+  <p style="margin-top: 40px; color: #888;">
+    尝试改变 width 动画（重排）对比 transform 动画（合成）
+  </p>
+
+</body>
+</html>
